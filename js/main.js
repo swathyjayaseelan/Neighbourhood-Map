@@ -28,8 +28,12 @@ function initMap() {
         marker.id = uniqueId;
         markers.push(marker);
         marker.addListener('click', function() {
-            this.setAnimation(google.maps.Animation.BOUNCE);
-            displayinfoWindow(this, infowindow);
+          var self=this;
+            displayinfoWindow(self, infowindow);
+            self.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function(){
+            self.setAnimation(null);
+          }, 2100);
 
         });
         uniqueId++;
@@ -62,7 +66,11 @@ function setMapOnAll(map) {
 function displayDetails(clickedLocation) {
     for (var i = 0; i < markers.length; i++) {
         if (markers[i].title === clickedLocation.title) {
-            markers[i].setAnimation(google.maps.Animation.BOUNCE);
+            var self = markers[i];
+            self.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function(){
+            self.setAnimation(null);
+          }, 2100);
             //console.log(clickedLocation.yelpID);
             getyelpData(clickedLocation.yelpID);
         }
@@ -76,8 +84,14 @@ var ViewModel = function() {
     locations.forEach(function(data) {
         self.locationList.push(data);
     });
-    self.details = ko.observable("");
-    self.shouldShow = ko.observable("true");
+    self.details = ko.observable('');
+    self.query = ko.observable('');
+    //Search feature
+    self.search = function(value){
+      displayspecificMarker(value);
+      console.log("here");
+    }
+    self.shouldShow = ko.observable('true');
     self.displayLocation = function(clickedLocation) {
         displayDetails(clickedLocation);
     };
@@ -85,7 +99,7 @@ var ViewModel = function() {
         displayspecificMarker(clickedLocation);
     };
     self.setUp = function() {
-        if ($("#myDropdown").hasClass("show")) {
+        if ($('#myDropdown').hasClass('show')) {
             setMapOnAll(null);
             vm.locationList([]);
         }
@@ -93,46 +107,56 @@ var ViewModel = function() {
 };
 var vm = new ViewModel();
 ko.applyBindings(vm);
+vm.query.subscribe(vm.search);
 //to refresh the map and list whenever refresh button is clikced
 function refresh() {
     vm.locationList([]);
     locations.forEach(function(data) {
         vm.locationList.push(data);
     });
-    vm.details("");
+    vm.details('');
     initMap();
 }
 //to open the menu bar in mobile browsers
 function myopen() {
-    if ($("#sidebar").hasClass("menu")) {
-        $("#sidebar").removeClass("menu");
-        $("#sidebar").addClass("openbar");
+    if ($('#sidebar').hasClass('menu')) {
+        $('#sidebar').removeClass('menu');
+        $('#sidebar').addClass('openbar');
     } else {
-      $("#sidebar").removeClass("openbar");
-        $("#sidebar").addClass("menu");
+      $('#sidebar').removeClass('openbar');
+        $('#sidebar').addClass('menu');
     }
 }
 //Function to handle the drop down menu, display the content and hide the existing list and hide the content and
 //display the existing list
 function myFunction() {
-    document.getElementById("myDropdown").classList.toggle("show");
-    if ($("#myDropdown").hasClass("show")) {
+    document.getElementById('myDropdown').classList.toggle('show');
+    if ($('#myDropdown').hasClass('show')) {
         vm.shouldShow(false);
     }
 }
 //function to display the marker when a location from the drop down menu is clicked
-function displayspecificMarker(clickedLocation) {
-    var marker = new google.maps.Marker({
-        position: clickedLocation.location,
-        map: map,
-        title: clickedLocation.title,
-    });
-    marker.addListener('click', function() {
-        displayinfoWindow(this, infowindow);
-    });
-    markers.push(marker);
-    vm.shouldShow(true);
-    vm.locationList.push(clickedLocation);
+function displayspecificMarker(value) {
+  vm.locationList([]);
+  setMapOnAll(null);
+  var finalValue = value.toLowerCase();
+  for(var i=0; i<locations.length; i++){
+    var locTitle = locations[i].title.toLowerCase();
+    if((locTitle.indexOf(finalValue))>=0){
+      var marker = new google.maps.Marker({
+          position: locations[i].location,
+          map: map,
+          title: locations[i].title,
+      });
+      marker.addListener('click', function() {
+          displayinfoWindow(this, infowindow);
+      });
+      markers.push(marker);
+      vm.shouldShow(true);
+      vm.locationList.push(locations[i]);
+    }
+  }
+
 }
 function nonce_generate() {
     return (Math.floor(Math.random() * 1e12).toString());
@@ -178,4 +202,7 @@ function getyelpData(yelpid) {
         }
     };
     $.ajax(settings);
+}
+function displayError() {
+  alert("Google Maps has failed to load. Please refresh the page ")
 }
