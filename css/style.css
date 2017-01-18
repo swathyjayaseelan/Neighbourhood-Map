@@ -1,0 +1,80 @@
+
+  body {
+    font-family: 'Abhaya Libre', serif;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    color: white;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    background-color: gray;
+  }
+.list{
+  color: lightblue;
+}
+.container{
+  margin-left: 0px;
+  display: block;
+}
+.menu
+{
+  background-color: gray;
+  position: absolute;
+}
+  #map {
+      bottom:0px;
+      height: 100%;
+      width: 100%;
+      left: 250px;
+      position: absolute;
+      right: 0px;
+      color: black;
+    }
+    #userinput
+    {
+      padding-top: 10px;
+    }
+  #searchbox{
+
+    width: inherit;
+  }
+  .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: white;
+      min-width: 160px;
+      margin-left: 60px;
+      color: black;
+  }
+  .dropbtn{
+    margin-top: 30px;
+    margin-left: 40px;
+    color: black;
+  }
+.show{
+  display:block;
+}
+#sidebarButton{
+  display: none;
+}
+@media only screen and (max-width: 600px){
+  #map{
+    left: 0px;
+    top: 30px;
+    z-index: 1;
+  }
+  .menu{
+    left: -9999px;
+    position: absolute;
+  }
+  .openbar{
+    left: 0px;
+    position: absolute;
+    z-index: 2;
+    background-color: gray;
+  }
+  #sidebarButton{
+    color: black;
+    display: block;
+  }
+}

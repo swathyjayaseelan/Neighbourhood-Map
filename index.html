@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Abhaya+Libre|Lateef" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" media="(max-width: 700px)" href="css/mobile.css">
+    <title>Neighbourhood Map
+    </title>
+  </head>
+  <body>
+    <!-- button to open the side bar on mobile browsers-->
+    <div>
+      <button id="sidebarButton" onclick="myopen()">Click here!
+      </button>
+    </div>
+    <!-- Information window -->
+    <div id="sidebar" class="menu">
+      <h3>Tourist attractions
+      </h3>
+      <div class="dropdown">
+        <button onclick="myFunction()" class="dropbtn" data-bind="click: setUp">Select location
+        </button>
+        <div id="myDropdown" class="dropdown-content">
+          <ul data-bind="foreach: location">
+            <li>
+              <a href="#" data-bind="text: title, click: $parent.displaySpecificLocation">
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <button class="dropbtn" style="margin-left: 60px" data-bind="click: refresh">Refresh
+      </button>
+      <div>
+        <br>
+        <br>
+        <h3>List of locations:
+        </h3>
+        <p>Click on a location and learn more about it
+        </p>
+        <ul class="list" data-bind="visible: shouldShow, foreach: locationList">
+          <li>
+            <a class="list" href="#" data-bind="click : $parent.displayLocation, text: title">
+            </a>
+          </li>
+        </ul>
+        <div id="informationwindow">
+          <h3>Details of location:
+          </h3>
+          <span data-bind="html: details">
+          </span>
+        </div>
+      </div>
+      <!--div to hold the map -->
+    </div>
+    <div id="map">
+    </div>
+    <!-- linking js files and maps-->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7JiHyyM-otZ2bdj-E6mFDKdu8zKsxu5Q&v=3&libraries=places&callback=initMap">
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+    </script>
+    <script src="js/bower_components/oauth-signature/dist/oauth-signature.js">
+    </script>
+    <script src="js/lib/knockout.js">
+    </script>
+    <script src="js/model.js">
+    </script>
+    <script src="js/main.js">
+    </script>
+  </body>
+</html>
