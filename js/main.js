@@ -22,7 +22,7 @@ function initMap() {
             position: position,
             map: map,
             title: title,
-            yelpid: ID
+            yelpID: ID
         });
         bounds.extend(marker.position);
         marker.id = uniqueId;
@@ -30,11 +30,7 @@ function initMap() {
         marker.addListener('click', function() {
           var self=this;
             displayinfoWindow(self, infowindow);
-            self.setAnimation(google.maps.Animation.BOUNCE);
-            setTimeout(function(){
-            self.setAnimation(null);
-          }, 2100);
-
+            displayDetails(self);
         });
         uniqueId++;
     }
@@ -49,6 +45,8 @@ function initMap() {
 function displayinfoWindow(marker, infowindow) {
     if (infowindow.marker != marker) {
         infowindow.marker = marker;
+        //getyelpData(marker.yelpid);
+        //console.log(marker.yelpid);
         infowindow.setContent('<div>' + marker.title + '<div');
         infowindow.open(map, marker);
         infowindow.addListener('closeclick', function() {
@@ -59,7 +57,7 @@ function displayinfoWindow(marker, infowindow) {
 //To clear markers on map to display only the markers of locations that are selected
 function setMapOnAll(map) {
     for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(map);
+        markers[i].setVisible(false);
     }
 }
 //Display details when a location from the list is clicked and bounce the respective marker
@@ -143,7 +141,7 @@ function displayspecificMarker(value) {
   for(var i=0; i<locations.length; i++){
     var locTitle = locations[i].title.toLowerCase();
     if((locTitle.indexOf(finalValue))>=0){
-      var marker = new google.maps.Marker({
+      /*var marker = new google.maps.Marker({
           position: locations[i].location,
           map: map,
           title: locations[i].title,
@@ -151,7 +149,10 @@ function displayspecificMarker(value) {
       marker.addListener('click', function() {
           displayinfoWindow(this, infowindow);
       });
-      markers.push(marker);
+      markers.push(marker);*/
+      console.log(markers[i].title);
+      console.log(markers);
+      markers[i].setVisible(true);
       vm.shouldShow(true);
       vm.locationList.push(locations[i]);
     }
